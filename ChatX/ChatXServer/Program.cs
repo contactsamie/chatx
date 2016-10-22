@@ -25,7 +25,7 @@ namespace ChatXServer
             {
                 SignalX.Server("SendMessage", (request) =>
                 {
-                    request.RespondTo("ReceiveMessage", request.Message);
+                    request.Respond( request.Message);
                 });
                 System.Diagnostics.Process.Start(url);
                 Console.ReadLine();
