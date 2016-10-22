@@ -2,22 +2,35 @@
   signalx.ready(function () {
     signalx.server("SendMessage", function (request) {
         setTimeout(function() {
-            request.respondTo("ReceiveMessage", "So you think that " + request.message);
+            request.respond( "So you think that " + request.message);
         },3000);
     });
-
-      signalx.client.ReceiveMessage = function(message) {
-          $(".msg_container_base").append('<div class="row msg_container base_receive"><div class="col-md-2 col-xs-2 avatar"><img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive "></div><div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>'+message+'</p><time datetime="2009-11-13T20:00">Timothy • 51 min</time></div></div></div>');
+    var updateMessageBox = function (m) {
+        var el = $(".msg_container_base");
+          el.append(m);
+           el.animate({ scrollTop: $(".msg_container_base")[0].scrollHeight }, 300);
       };
-
+      var sendMessage = function(m) {
+          m && signalx.server.SendMessage(m);
+          $("#btn-input").val(' ');
+          signalx.client.SelfMessage(m, "ReceiveMessage");
+      };
+      signalx.client.ReceiveMessage = function(message) {
+          updateMessageBox('<div class="row msg_container base_receive"><div class="col-md-2 col-xs-2 avatar"><img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive "></div><div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' + message + '</p><time datetime="2009-11-13T20:00">Timothy • 51 min</time></div></div></div>');
+      };
       signalx.client.SelfMessage = function (message) {
-          $(".msg_container_base").append('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages msg_sent"><p>' + message + '</p><time datetime="2009-11-13T20:00">Timothy • 51 min</time></div></div><div class="col-md-2 col-xs-2 avatar"><img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive "> </div></div>');
+          updateMessageBox('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages msg_sent"><p>' + message + '</p><time datetime="2009-11-13T20:00">Timothy • 51 min</time></div></div><div class="col-md-2 col-xs-2 avatar"><img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive "> </div></div>');
       };
       $(document).on('click', '#btn-chat', function (e) {
-            var val = $("#btn-input").val();
-            val &&  signalx.server.SendMessage(val);
-            $("#btn-input").val(' ');
-            signalx.client.SelfMessage(val);
+          sendMessage($("#btn-input").val());
+      });
+      $("#btn-input").keypress(function (e) {
+          var key = e.which;
+          if (key == 13)  // the enter key code
+          {
+              sendMessage($("#btn-input").val());
+              return false;
+          }
       });
       
 

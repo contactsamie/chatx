@@ -40,9 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="css\chatx.css" />
+    <EmbeddedResource Include="css\chatx.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="js\chatx.js" />
+    <EmbeddedResource Include="js\chatx.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="css\bootstrap.css">
