@@ -70,7 +70,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SignalXLib.Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SignalX.0.1.1-pre\lib\SignalXLib.Lib.dll</HintPath>
+      <HintPath>..\packages\SignalX.0.2.1-pre\lib\SignalXLib.Lib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
