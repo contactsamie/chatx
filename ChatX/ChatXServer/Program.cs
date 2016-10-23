@@ -16,6 +16,17 @@ namespace ChatXServer
             app.UseSignalX(new SignalX(""));
         }
     }
+
+    public class ChatMessage
+    {
+        public ChatMessage()
+        {
+            Recepients=new List<string>();
+        }
+        public object Message { set; get; }
+        public List<string> Recepients { set; get; }
+    }
+
     internal class Program
     {
         private static void Main(string[] args)
@@ -25,8 +36,16 @@ namespace ChatXServer
             {
                 SignalX.Server("SendMessage", (request) =>
                 {
-                    request.RespondToSender(request.Message);
-                    request.RespondToAll(request.Message);
+                    var chat = request.Message as ChatMessage;
+                    if (chat?.Recepients == null || chat.Recepients.Count <= 0) return;
+                    foreach (var recepient in chat.Recepients.Where(recepient => !string.IsNullOrEmpty(recepient)))
+                    {
+                        request.RespondToUser( recepient, request.Message);
+                    }
+                });
+                SignalX.Server("GetConnectionID", (request) =>
+                {
+                    request.RespondToSender(request.ConnectionId);
                 });
                 System.Diagnostics.Process.Start(url);
                 Console.ReadLine();

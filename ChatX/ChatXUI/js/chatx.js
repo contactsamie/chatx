@@ -11,7 +11,10 @@
            el.animate({ scrollTop: $(".msg_container_base")[0].scrollHeight }, 300);
       };
       var sendMessage = function(m) {
-          m && signalx.server.SendMessage(m, "ReceiveMessage");
+          m && signalx.server.SendMessage({
+              Message: m,
+              Recepients:[]
+          }, "ReceiveMessage");
           $("#btn-input").val(' ');
           m && signalx.client.SelfMessage(m);
       };
@@ -32,15 +35,14 @@
               return false;
           }
       });
-      
-
-
-
-
-
-
-
-
+      signalx.client.ReceiveConId = function (result) {
+              $("#conid").html(result);
+          };
+      setTimeout(function () {
+          signalx.server.GetConnectionID("hfjfj", function (result) {
+              $("#conid").html(result);
+          });
+      },3000);
 
         $(document).on('click', '.panel-heading span.icon_minim', function (e) {
             var $this = $(this);
